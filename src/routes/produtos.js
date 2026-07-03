@@ -1,10 +1,9 @@
 const express = require("express");
+
 const router = express.Router();
 
-const produtos = require("../data/produtos");
+const produtosController = require("../controllers/produtosController");
 
-router.get("/", (req, res) => {
-  res.json(produtos);
-});
+router.get("/", produtosController.listarProdutos);
 
 module.exports = router;

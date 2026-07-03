@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+
+  backend:
+    image: pmariotti/meu-backend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://usuario:senha@db:5432/meubanco
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: meubanco
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3001:3000"
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
+
+
+

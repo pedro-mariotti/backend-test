@@ -12,8 +12,4 @@ app.use(express.json());
 app.use("/api/produtos", produtos);
 app.use("/api/loja", loja);
 
-app.get("/", (req, res) => {
-    res.send("API da Cafeteria funcionando!");
-});
-
 module.exports = app;
